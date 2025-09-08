@@ -259,10 +259,9 @@
             case "/": resultado = v2 === 0 ? "Erro" : (v1 / v2).toFixed(2); break;
           }
         }
-        linha.querySelector(".resultado").value = resultado || "Resultado";
+        linha.querySelector(".resultado").value = (resultado !== "" ? resultado : "Resultado");
       });
     });
   </script>
 </body>
 </html>
-
