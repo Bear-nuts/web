@@ -173,4 +173,184 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 10px; /* Fonte: 10px */
-            transition: background-
+            transition: background-color 0.2s ease;
+        }
+        .calculator-b .calc-row .clear-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Parte A — Calculadora "Teclado"</h2>
+        <div class="calculator-a">
+            <input type="text" class="display" id="calcADisplay" readonly>
+            <div class="keys">
+                <button class="btn">7</button>
+                <button class="btn">8</button>
+                <button class="btn">9</button>
+                <button class="btn operator">/</button>
+                <button class="btn">4</button>
+                <button class="btn">5</button>
+                <button class="btn">6</button>
+                <button class="btn operator">*</button>
+                <button class="btn">1</button>
+                <button class="btn">2</button>
+                <button class="btn">3</button>
+                <button class="btn operator">-</button>
+                <button class="btn">0</button>
+                <button class="btn">.</button>
+                <button class="btn clear">CA</button>
+                <button class="btn operator">+</button>
+                <button class="btn equals">=</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Parte B — Calculadora "Linhas"</h2>
+        <div class="calculator-b">
+            <div class="calc-row">
+                <input type="number" class="num-input num1" placeholder="N1">
+                <button class="op-btn" data-operator="+">+</button>
+                <input type="number" class="num-input num2" placeholder="N2">
+                <span>=</span>
+                <input type="text" class="result-output" readonly>
+                <button class="clear-btn">Limpar</button>
+            </div>
+            <div class="calc-row">
+                <input type="number" class="num-input num1" placeholder="N1">
+                <button class="op-btn" data-operator="-">−</button>
+                <input type="number" class="num-input num2" placeholder="N2">
+                <span>=</span>
+                <input type="text" class="result-output" readonly>
+                <button class="clear-btn">Limpar</button>
+            </div>
+            <div class="calc-row">
+                <input type="number" class="num-input num1" placeholder="N1">
+                <button class="op-btn" data-operator="*">*</button>
+                <input type="number" class="num-input num2" placeholder="N2">
+                <span>=</span>
+                <input type="text" class="result-output" readonly>
+                <button class="clear-btn">Limpar</button>
+            </div>
+            <div class="calc-row">
+                <input type="number" class="num-input num1" placeholder="N1">
+                <button class="op-btn" data-operator="/">/</button>
+                <input type="number" class="num-input num2" placeholder="N2">
+                <span>=</span>
+                <input type="text" class="result-output" readonly>
+                <button class="clear-btn">Limpar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Adiciona um listener para garantir que o DOM esteja completamente carregado antes de executar o script.
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Lógica para a Parte A (Calculadora "Teclado") ---
+            const displayA = document.getElementById('calcADisplay');
+            const keysA = document.querySelector('.calculator-a .keys');
+
+            keysA.addEventListener('click', e => {
+                // Se o que foi clicado não for um botão, não faz nada.
+                if (!e.target.matches('button')) return;
+
+                const key = e.target;
+                const action = key.textContent;
+
+                // Se o display mostra "Erro!", limpa antes de inserir novo número.
+                if (displayA.value === 'Erro!' && !isNaN(action)) {
+                     displayA.value = '';
+                }
+
+                if (action === 'CA') {
+                    displayA.value = '';
+                } else if (action === '=') {
+                    try {
+                        // Decisão: Usar eval() conforme permitido para este exercício simples.
+                        // Em um projeto real, seria mais seguro criar uma função de parsing
+                        // para evitar riscos de segurança (injeção de código).
+                        const result = eval(displayA.value.replace(/[^-()\d/*+.]/g, ''));
+                        displayA.value = result;
+                    } catch (error) {
+                        displayA.value = 'Erro!';
+                    }
+                } else {
+                    // Impede que a expressão comece com um operador (exceto o sinal de -)
+                    if (displayA.value === '' && isNaN(action) && action !== '.' && action !== '-') {
+                        return;
+                    }
+                    displayA.value += action;
+                }
+            });
+
+
+            // --- Lógica para a Parte B (Calculadora "Linhas") ---
+            const allCalcRows = document.querySelectorAll('.calculator-b .calc-row');
+
+            allCalcRows.forEach(row => {
+                const num1Input = row.querySelector('.num1');
+                const num2Input = row.querySelector('.num2');
+                const opBtn = row.querySelector('.op-btn');
+                const resultOutput = row.querySelector('.result-output');
+                const clearBtn = row.querySelector('.clear-btn');
+                
+                // Evento para o botão de operação (+, -, *, /)
+                opBtn.addEventListener('click', () => {
+                    // Decisão: Tratar valores vazios como 0 para um comportamento mais robusto.
+                    // Isso evita erros se o usuário clicar em calcular sem preencher os campos.
+                    const val1 = parseFloat(num1Input.value) || 0;
+                    const val2 = parseFloat(num2Input.value) || 0;
+                    
+                    const operator = opBtn.dataset.operator;
+                    let result = 0;
+
+                    switch (operator) {
+                        case '+':
+                            result = val1 + val2;
+                            break;
+                        case '-':
+                            result = val1 - val2;
+                            break;
+                        case '*':
+                            result = val1 * val2;
+                            break;
+                        case '/':
+                            // Verifica divisão por zero.
+                            if (val2 === 0) {
+                                result = 'Erro';
+                            } else {
+                                result = val1 / val2;
+                            }
+                            break;
+                    }
+                    
+                    // Exibe o resultado, formatando se for um número com muitas casas decimais.
+                    if (typeof result === 'number') {
+                         resultOutput.value = parseFloat(result.toFixed(4));
+                    } else {
+                         resultOutput.value = result;
+                    }
+                });
+
+                // Evento para o botão "Limpar" da linha
+                clearBtn.addEventListener('click', () => {
+                    // Limpa os 3 campos da própria linha.
+                    num1Input.value = '';
+                    num2Input.value = '';
+                    resultOutput.value = '';
+                });
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
