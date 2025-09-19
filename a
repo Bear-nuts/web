@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras - Desafio</title>
+    <style>
+        /* Estilos Gerais */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            color: #444;
+        }
+
+        /* --- Parte A: Calculadora "Teclado" --- */
+        .calculator-a {
+            width: 280px;
+            border: 5px solid #cccccc;
+            /* 5px solid grey */
+            border-radius: 15px;
+            padding: 10px;
+            /* 10px padding da div */
+            background-color: #e0e0e0;
+        }
+
+        /* Decisão de Visor: Usei <input readonly> pois é semanticamente 
+          correto para um campo de exibição de dados que se parece com 
+          um formulário, além de facilitar a leitura do valor via .value.
+          A alternativa seria uma <div> com contentEditable=false.
+        */
+        .calculator-a .display {
+            width: 100%;
+            height: 60px;
+            background-color: #fefefe;
+            border: 1px solid #b0b0b0;
+            border-radius: 8px;
+            font-size: 36px;
+            /* font 36px */
+            text-align: right;
+            padding-right: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            color: #333;
+            max-length: 12; /* 12 caracteres */
+        }
+
+        .calculator-a .keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            /* 5px margin botao (usando gap) */
+        }
+
+        .calculator-a .btn {
+            padding: 10px;
+            /* 10px padding botao */
+            border-radius: 10px;
+            /* 10px radius */
+            border: 1px solid #b0b0b0;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: background-color 0.2s ease;
+        }
+
+        /* O hover deve mudar a cor de fundo, conforme pedido. */
+        .calculator-a .btn:hover {
+            background-color: #dcdcdc;
+        }
+
+        .calculator-a .btn.operator {
+            background-color: #ffb74d;
+        }
+
+        .calculator-a .btn.operator:hover {
+            background-color: #ffa726;
+        }
+
+        .calculator-a .btn.clear {
+            background-color: #ef5350;
+            color: white;
+        }
+
+        .calculator-a .btn.clear:hover {
+            background-color: #e53935;
+        }
+
+        .calculator-a .btn.equals {
+            background-color: #66bb6a;
+            color: white;
+            grid-column: span 2;
+            /* Faz o botão de igual ocupar 2 colunas */
+        }
+
+        .calculator-a .btn.equals:hover {
+            background-color: #4caf50;
+        }
+
+
+        /* --- Parte B: Calculadora "Linhas" --- */
+        .calculator-b {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            font-size: 14px; /* Fonte: 14px */
+        }
+
+        .calculator-b .calc-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calculator-b .calc-row input {
+            border: 1px solid #CCC; /* #CCCC 1px */
+            background-color: #EEEEEE; /* #EEEE */
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 14px; /* Fonte: 14px */
+            text-align: center;
+        }
+
+        .calculator-b .calc-row .num-input {
+            width: 37px; /* size = 3 + 10 + 10 + (padding) */
+        }
+        
+        .calculator-b .calc-row .result-output {
+            width: 50px; /* size = 50px */
+            background-color: #e0e0e0;
+        }
+
+        .calculator-b .calc-row .op-btn {
+            width: 25px;
+            height: 25px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            background-color: #EE5000; /* #EE5000 */
+            transition: background-color 0.2s ease;
+        }
+
+        /* O hover deve mudar a cor de fundo, conforme pedido. */
+        .calculator-b .calc-row .op-btn:hover {
+            background-color: #FF8000; /* #FF8000 */
+        }
+
+        .calculator-b .calc-row .clear-btn {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px; /* Fonte: 10px */
+            transition: background-
